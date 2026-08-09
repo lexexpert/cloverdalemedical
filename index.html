@@ -28,7 +28,7 @@
           <h1>Experience Compassionate, Cutting-edge Care</h1>
           <p>Welcome to Cloverdale Medical Centre — where leading-edge medicine meets compassionate, personalized care for your entire family.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="tel:+14162396122">Book Your Appointment</a>
+            <button class="button button-primary" id="book-appointment-button" type="button">Book Your Appointment</button>
             <a class="button button-secondary" href="#services">Explore Services</a>
           </div>
         </div>
@@ -123,27 +123,158 @@
             <div><strong>Saturday</strong><span>9:00am – 4:00pm</span></div>
             <div><strong>Sunday</strong><span>10:00am – 4:00pm</span></div>
           </div>
+        </div>
+        <div class="map-card">
+          <h3>Our Location</h3>
           <div class="map-embed">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2882.532508712074!2d-79.5796319849957!3d43.62896497912319!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b3c701af2f4fb%3A0x1bf7a3a4ac0ea78c!2s250%20The%20East%20Mall%2C%20Etobicoke%2C%20ON%20M9B%203Y8%2C%20Canada!5e0!3m2!1sen!2sus!4v1700000000000"
               width="100%"
-              height="280"
+              height="320"
               style="border:0;"
               allowfullscreen=""
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade">
             </iframe>
           </div>
-          <a class="button button-secondary" href="https://cloverdalemedical.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>
         </div>
       </div>
     </section>
   </main>
 
+  <div class="modal-overlay" id="appointment-modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="appointment-modal-title">
+      <button class="modal-close" id="modal-close" aria-label="Close appointment details">×</button>
+      <h2 id="appointment-modal-title">Call to book your appointment</h2>
+      <p class="modal-lead">The fastest way to secure your appointment is to call us directly. Our reception team is ready to help.</p>
+      <div class="booking-contact">
+        <p class="call-now"><strong>Call now:</strong> <a href="tel:+14162396122">(416) 239-6122</a></p>
+        <a class="button button-primary" href="tel:+14162396122">Call (416) 239-6122</a>
+        <p>Can’t get through immediately? Please leave a voicemail and our team will return your call as soon as possible.</p>
+        <p><strong>Operating hours:</strong></p>
+        <ul>
+          <li>Monday: 9:00am – 7:00pm</li>
+          <li>Tuesday: 9:00am – 7:00pm</li>
+          <li>Wednesday: 9:00am – 5:00pm</li>
+          <li>Thursday: 9:00am – 7:00pm</li>
+          <li>Friday: 9:00am – 5:00pm</li>
+          <li>Saturday: 9:00am – 4:00pm</li>
+          <li>Sunday: 10:00am – 4:00pm</li>
+        </ul>
+        <p>Once you call, our team will book your appointment directly.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-notification" id="toast-notification" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookie consent banner">
+    <div class="cookie-banner-copy">
+      <p>We use cookies to improve your experience on our site. By using our site, you consent to the use of cookies. Rejecting cookies will prevent non-essential cookies from loading.</p>
+    </div>
+    <div class="cookie-banner-actions">
+      <button class="button button-primary" id="accept-all">Accept all</button>
+      <button class="button button-secondary" id="accept-essential">Accept essential</button>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var banner = document.getElementById('cookie-banner');
+      var acceptAllBtn = document.getElementById('accept-all');
+      var acceptEssentialBtn = document.getElementById('accept-essential');
+      var storageKey = 'cloverdale_cookie_consent';
+
+      function setConsent(value) {
+        try {
+          localStorage.setItem(storageKey, value);
+        } catch (e) {
+          console.warn('Cookie consent storage unavailable', e);
+        }
+      }
+
+      function hideBanner() {
+        if (banner) {
+          banner.classList.add('cookie-banner-hidden');
+        }
+      }
+
+      function getConsent() {
+        try {
+          return localStorage.getItem(storageKey);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      var currentConsent = getConsent();
+      if (currentConsent === 'accepted' || currentConsent === 'essential') {
+        hideBanner();
+      }
+
+      if (acceptAllBtn) {
+        acceptAllBtn.addEventListener('click', function() {
+          setConsent('accepted');
+          hideBanner();
+        });
+      }
+
+      var bookButton = document.getElementById('book-appointment-button');
+      var modal = document.getElementById('appointment-modal');
+      var modalClose = document.getElementById('modal-close');
+
+      function openModal() {
+        if (modal) {
+          modal.classList.add('modal-open');
+          modal.setAttribute('aria-hidden', 'false');
+        }
+      }
+
+      function closeModal() {
+        if (modal) {
+          modal.classList.remove('modal-open');
+          modal.setAttribute('aria-hidden', 'true');
+        }
+      }
+
+      if (bookButton) {
+        bookButton.addEventListener('click', function() {
+          openModal();
+        });
+      }
+
+      if (modalClose) {
+        modalClose.addEventListener('click', function() {
+          closeModal();
+        });
+      }
+
+      if (modal) {
+        modal.addEventListener('click', function(event) {
+          if (event.target === modal) {
+            closeModal();
+          }
+        });
+      }
+
+      if (acceptEssentialBtn) {
+        acceptEssentialBtn.addEventListener('click', function() {
+          setConsent('essential');
+          hideBanner();
+        });
+      }
+    })();
+  </script>
+
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>© 2026 Cloverdale Medical Centre. Dedicated to quality family healthcare in Etobicoke.</p>
-      <p><a href="tel:+14162396122">(416) 239-6122</a> • <a href="mailto:support@mail.cloverdalemedical.com">support@mail.cloverdalemedical.com</a></p>
+      <p>
+        <a href="tel:+14162396122">(416) 239-6122</a> •
+        <a href="mailto:support@mail.cloverdalemedical.com">support@mail.cloverdalemedical.com</a> •
+        <a href="privacy-policy.html">Privacy Policy</a> •
+        <a href="cookie-policy.html">Cookie Policy</a>
+      </p>
     </div>
   </footer>
 </body>
